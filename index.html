@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>森大哥與純葉拍拖日數</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #counter {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="counter">
+        <h2>森大哥與向井純葉拍拖日數</h2>
+        <p></p>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculate() {
+            let resultParagraph = document.getElementById('result');
+            let day2Date = new Date(2023, 10, 26, 18, 31);
+
+            let diff = new Date() - day2Date.getTime();
+
+            let msec = diff;
+            let dd = Math.floor(msec / 1000 / 60 / 60 / 24);
+            msec -= dd * 1000 * 60 * 60 * 24;
+            let hh = Math.floor(msec / 1000 / 60 / 60);
+            msec -= hh * 1000 * 60 * 60;
+            let mm = Math.floor(msec / 1000 / 60);
+            msec -= mm * 1000 * 60;
+            let ss = Math.floor(msec / 1000);
+            msec -= ss * 1000;
+            resultParagraph.innerHTML = '<span style="font-size:50px;">第</span><span style="font-size:80px;">' + dd + '</span><span style="font-size:50px;">日</span><br><span style="font-size:60px;">'
+                + hh + '</span><span style="font-size:30px;">小時</span><span style="font-size:60px;">' + mm + '</span><span style="font-size:30px;">分</span><span style="font-size:60px;">'
+                + ss + '</span><span style="font-size:30px;">秒</span>';
+            setTimeout(calculate, 100);
+        }        
+        calculate();
+    </script>
+</body>
+
+</html>
