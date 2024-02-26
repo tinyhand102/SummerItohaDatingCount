@@ -1,0 +1,59 @@
+.canvas-before-firework {
+    display: none
+}
+
+.canvas-after-firework {
+    display: block
+}
+
+.content-before-firework {
+    position: absolute;
+    color: #000000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Source Sans Pro";
+    font-weight: 500;
+    font-size: 1em;
+    -webkit-user-select: none;
+    user-select: none;
+    container-name: sidebar
+}
+
+.content-after-firework {
+    position: absolute;
+    color: #ffffff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Source Sans Pro";
+    font-weight: 500;
+    font-size: 1em;
+    -webkit-user-select: none;
+    user-select: none;
+    container-name: sidebar
+}
+
+#counter {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.body-before-firework {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    text-align: center;
+    background: #ffffff;
+}
+
+.body-after-firework {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    text-align: center;
+
+    margin: 0;
+    background: #020202;
+    cursor: crosshair;
+}
