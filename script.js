@@ -181,7 +181,7 @@ function calculate() {
 }
 
 function showFirework(dd) {
-    if (dd != 100 || canvas == null) return;
+    if ((dd % 100 != 0 && dd % 365 != 0) || canvas == null) return;
     canvas.className = "canvas-after-firework";
     textBlock.className = "content-after-firework";
     body.className = "body-after-firework";
