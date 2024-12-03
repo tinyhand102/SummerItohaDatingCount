@@ -72,7 +72,7 @@
 .lyrics-background p {
     position: absolute;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 64px;
+    font-size: 32px;
     color: #333;
     opacity: 0.1;
     margin: 0;
