@@ -1,3 +1,5 @@
+//01000001 01010011
+// helper functions
 const PI2 = Math.PI * 2
 const random = (min, max) => Math.random() * (max - min + 1) + min | 0
 const timestamp = _ => new Date().getTime()
@@ -157,13 +159,91 @@ function addMinutes(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
 }
 
+let lyricsPool = [];
+let displayedLyrics = new Set();
+let lyricsDisplayTimer;
+
+function addLyricsToBackground() {
+    const lyricsBackground = document.getElementById('lyrics-background');
+    lyricsPool = [
+        "曾想像太好 歷太多失意",
+        "孤單的滋味 天知我知",
+        "太幸福的事也許要變卦幾次",
+        "不捨的思念 不可竭止",
+        "最著緊的事已經錯過無限次",
+        "請讓我將心中句子 認真講你知",
+        "我需要 那些愛 你沒再施捨",
+        "反正亦孤單變老 情願快些",
+        "也許相愛很難",
+        "就難在其實雙方各有各寄望 怎麼辦",
+        "要單戀都難",
+        "受太大的禮會內疚 卻也無力歸還",
+        "也許不愛不難",
+    ];
+
+    function spawnLyrics() {
+        if (lyricsPool.length === 0) return;
+
+        let lyricIndex;
+        do {
+            lyricIndex = random(0, lyricsPool.length - 1);
+            console.log(displayedLyrics.size, lyricsPool.length)
+            if (displayedLyrics.size==lyricsPool.length) break;
+        } while (displayedLyrics.has(lyricsPool[lyricIndex]));
+
+        const lyric = lyricsPool[lyricIndex];
+        displayedLyrics.add(lyric);
+
+        const p = document.createElement('p');
+        p.textContent = lyric;
+
+        const x = random(0, window.innerWidth);
+        const y = random(0, window.innerHeight);
+        p.style.left = `${x}px`;
+        p.style.top = `${y}px`;
+
+        if (Math.random() < 0.5) { 
+            p.style.whiteSpace = 'normal';
+            p.style.width = '1px';
+            p.style.textAlign = 'center';
+            p.style.lineHeight = '1.5em';
+        } else {
+            p.style.whiteSpace = 'nowrap';
+            p.style.width = 'auto';
+        }
+
+        lyricsBackground.appendChild(p);
+
+        setTimeout(() => {
+            p.classList.add('fade-out');
+            setTimeout(() => {
+                p.remove();
+                displayedLyrics.delete(lyric);
+            }, 500)
+        }, 5000);
+
+        lyricsDisplayTimer = setTimeout(spawnLyrics, 1000);
+    }
+    spawnLyrics();
+}
+
+function showLyricsBackground() {
+    const lyricsBackground = document.getElementById('lyrics-background');
+    lyricsBackground.style.display = 'block';
+    addLyricsToBackground();
+}
+
+
+showLyricsBackground();
+
 function calculate() {
     const resultParagraph = document.getElementById('result');
-    // 26Nov, Month is zero-based
+    // 2023, 26Nov, Month is zero-based
     // 18:31, UTC+8
-    const day2Date = new Date(2023, 10, 26, 18, 31);
+    // const day2Date = new Date(2023, 10, 26, 18, 31);
+    const day2Date = new Date(2024, 11, 1, 15, 31);
     const timzone_HKT_offset_ms = (new Date().getTimezoneOffset() + 480) * 60 * 1000;
-    const diff = timestamp() + timzone_HKT_offset_ms - day2Date.getTime()
+    const diff = timestamp() + timzone_HKT_offset_ms - day2Date.getTime();
     let msec = diff;
     const dd = Math.floor(msec / (1000 * 60 * 60 * 24));
     msec -= dd * 1000 * 60 * 60 * 24;
@@ -175,6 +255,15 @@ function calculate() {
     resultParagraph.innerHTML = '<span style="font-size:1.8em;">第</span><span style="font-size:2em;">' + dd + '</span><span style="font-size:1.8em;">日</span><br><span style="font-size:1.9em;">'
         + hh + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mm + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
         + ss + '</span><span style="font-size:1.5em;">秒</span>';
+
+    const day2DateOld = new Date(2023, 10, 26, 18, 31);
+    const diffOld = new Date(2024, 11, 1, 15, 31).getTime() + timzone_HKT_offset_ms - day2DateOld.getTime();
+    let msecOld = diffOld;
+    const ddOld = Math.floor(msecOld / (1000 * 60 * 60 * 24));
+    msecOld -= ddOld * 1000 * 60 * 60 * 24;
+    const hhOld = Math.floor(msecOld / (1000 * 60 * 60));
+    resultParagraph.innerHTML += '<br><del><span style="font-size:0.9em;">第</span><span style="font-size:1em;">' + ddOld + '</span><span style="font-size:0.9em;">日</span><span style="font-size:0.95em;">'
+        + hhOld + '</span><span style="font-size:0.75em;">小時</span></del>';
 
     showFirework(dd);
     setTimeout(calculate, 200);

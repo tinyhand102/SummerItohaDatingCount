@@ -57,3 +57,29 @@
     background: #020202;
     cursor: crosshair;
 }
+
+.lyrics-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.lyrics-background p {
+    position: absolute;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 64px;
+    color: #333;
+    opacity: 0.1;
+    margin: 0;
+    padding: 0;
+}
+
+.fade-out {
+    transition: opacity 0.5s ease-out;
+    opacity: 0;
+}
