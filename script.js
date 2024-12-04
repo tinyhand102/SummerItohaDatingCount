@@ -187,8 +187,7 @@ function addLyricsToBackground() {
         let lyricIndex;
         do {
             lyricIndex = random(0, lyricsPool.length - 1);
-            console.log(displayedLyrics.size, lyricsPool.length)
-            if (displayedLyrics.size==lyricsPool.length) break;
+            if (displayedLyrics.size == lyricsPool.length) break;
         } while (displayedLyrics.has(lyricsPool[lyricIndex]));
 
         const lyric = lyricsPool[lyricIndex];
@@ -202,7 +201,7 @@ function addLyricsToBackground() {
         p.style.left = `${x}px`;
         p.style.top = `${y}px`;
 
-        if (Math.random() < 0.5) { 
+        if (Math.random() < 0.5) {
             p.style.whiteSpace = 'normal';
             p.style.width = '1px';
             p.style.textAlign = 'center';
@@ -233,15 +232,23 @@ function showLyricsBackground() {
     addLyricsToBackground();
 }
 
-
-showLyricsBackground();
+function playBGM() {
+    const audioElement = document.getElementById('background-audio');
+    document.body.onclick = function () {
+        audioElement.play().then(() => {
+            audioElement.muted = false;
+            audioElement.volume = 0.5;
+            document.body.onclick = null;
+        });
+    };
+}
 
 function calculate() {
     const resultParagraph = document.getElementById('result');
     // 2023, 26Nov, Month is zero-based
     // 18:31, UTC+8
-    // const day2Date = new Date(2023, 10, 26, 18, 31);
-    const day2Date = new Date(2024, 11, 1, 15, 31);
+    const day2Date = new Date(2023, 10, 26, 18, 31);
+    // const day2Date = new Date(2024, 11, 1, 15, 31);
     const timzone_HKT_offset_ms = (new Date().getTimezoneOffset() + 480) * 60 * 1000;
     const diff = timestamp() + timzone_HKT_offset_ms - day2Date.getTime();
     let msec = diff;
@@ -256,12 +263,16 @@ function calculate() {
         + hh + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mm + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
         + ss + '</span><span style="font-size:1.5em;">秒</span>';
 
-    const day2DateOld = new Date(2023, 10, 26, 18, 31);
-    const diffOld = new Date(2024, 11, 1, 15, 31).getTime() + timzone_HKT_offset_ms - day2DateOld.getTime();
+    const day2DateOld = new Date(2024, 11, 1, 15, 31);
+    const diffOld = new Date(2024, 11, 4, 18, 0).getTime() + timzone_HKT_offset_ms - day2DateOld.getTime();
     let msecOld = diffOld;
     const ddOld = Math.floor(msecOld / (1000 * 60 * 60 * 24));
     msecOld -= ddOld * 1000 * 60 * 60 * 24;
     const hhOld = Math.floor(msecOld / (1000 * 60 * 60));
+    msecOld -= hhOld * 1000 * 60 * 60;
+    const mmOld = Math.floor(msecOld / (1000 * 60));
+    msecOld -= mmOld * 1000 * 60;
+    const ssOld = Math.floor(msecOld / 1000);
     resultParagraph.innerHTML += '<br><del><span style="font-size:0.9em;">第</span><span style="font-size:1em;">' + ddOld + '</span><span style="font-size:0.9em;">日</span><span style="font-size:0.95em;">'
         + hhOld + '</span><span style="font-size:0.75em;">小時</span></del>';
 
@@ -276,4 +287,6 @@ function showFirework(dd) {
     body.className = "body-after-firework";
 }
 
+playBGM();
+showLyricsBackground();
 calculate();
