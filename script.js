@@ -275,7 +275,32 @@ function calculate() {
     const ssOld = Math.floor(msecOld / 1000);
     resultParagraph.innerHTML += '<br><del><span style="font-size:0.9em;">第</span><span style="font-size:1em;">' + ddOld + '</span><span style="font-size:0.9em;">日</span><span style="font-size:0.95em;">'
         + hhOld + '</span><span style="font-size:0.75em;">小時</span></del>';
+    
 
+    const result2Paragraph = document.getElementById('result2');
+    // 2026, 1Feb, Month is zero-based
+    // 00:00, UTC+8
+    const day2Date2 = new Date(2026, 1, 1, 0, 0);
+    const diff2 = timestamp() + timzone_HKT_offset_ms - day2Date2.getTime();
+
+    // When diff < 0 (date not reached yet), show a proper countdown for hh/mm/ss.
+    const MS_PER_SECOND = 1000;
+    const MS_PER_MINUTE = 60 * MS_PER_SECOND;
+    const MS_PER_HOUR = 60 * MS_PER_MINUTE;
+    const MS_PER_DAY = 24 * MS_PER_HOUR;
+
+    msec = Math.abs(diff2);
+    let dd2 = Math.floor(msec / MS_PER_DAY);
+    msec -= dd2 * MS_PER_DAY;
+    const hh2 = Math.floor(msec / MS_PER_HOUR);
+    msec -= hh2 * MS_PER_HOUR;
+    const mm2 = Math.floor(msec / MS_PER_MINUTE);
+    msec -= mm2 * MS_PER_MINUTE;
+    const ss2 = Math.floor(msec / MS_PER_SECOND);
+    if (diff2 < 0) dd2 = -dd2;
+    result2Paragraph.innerHTML = '<span style="font-size:1.8em;">第</span><span style="font-size:2em;">' + dd2 + '</span><span style="font-size:1.8em;">日</span><br><span style="font-size:1.9em;">'
+        + hh2 + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mm2 + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
+        + ss2 + '</span><span style="font-size:1.5em;">秒</span>';
     showFirework(dd);
     setTimeout(calculate, 200);
 }
