@@ -72,7 +72,7 @@
 .lyrics-background p {
     position: absolute;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 32px;
+    font-size: 64px;
     color: #333;
     opacity: 0.1;
     margin: 0;
@@ -83,3 +83,26 @@
     transition: opacity 0.5s ease-out;
     opacity: 0;
 }
+
+#overlay-nan {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-12deg);
+    color: red;
+    font-weight: bold;
+    font-size: 3.4em;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+#overlay-nan h2 {
+    margin: 0 0 0.2em 0;
+    font-size: 1.5em;
+    color: red;
+}
+
