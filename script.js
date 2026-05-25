@@ -160,7 +160,9 @@ function addMinutes(date, minutes) {
 }
 
 let lyricsPool = [];
+let lyricsPool2 = [];
 let displayedLyrics = new Set();
+let displayedLyrics2 = new Set();
 let lyricsDisplayTimer;
 
 function addLyricsToBackground() {
@@ -172,15 +174,23 @@ function addLyricsToBackground() {
         "不捨的思念 不可竭止",
         "最著緊的事已經錯過無限次",
         "請讓我將心中句子 認真講你知",
-        "我需要 那些愛 你沒再施捨",
-        "反正亦孤單變老 情願快些",
-        "也許相愛很難",
-        "就難在其實雙方各有各寄望 怎麼辦",
-        "要單戀都難",
-        "受太大的禮會內疚 卻也無力歸還",
-        "也許不愛不難",
+        // "我需要 那些愛 你沒再施捨",
+        // "反正亦孤單變老 情願快些",
+        // "也許相愛很難",
+        // "就難在其實雙方各有各寄望 怎麼辦",
+        // "要單戀都難",
+        // "受太大的禮會內疚 卻也無力歸還",
+        // "也許不愛不難",
     ];
-
+    lyricsPool2 = [
+        "貪戀她拋棄你 是否當初想法不對",
+        "長時期吃喝玩樂新鮮感減退",
+        "誰是我最愛的應該一個應該三個應該數到像流水",
+        "這個世界最壞罪名 叫太易動情",
+        "如若早三五年相見 何來內心交戰?",
+        "難道我有勇氣反悔諾言我專一",
+        "我需要 那些愛 你沒再施捨",
+    ];
     function spawnLyrics() {
         if (lyricsPool.length === 0) return;
 
@@ -224,6 +234,52 @@ function addLyricsToBackground() {
         lyricsDisplayTimer = setTimeout(spawnLyrics, 1000);
     }
     spawnLyrics();
+
+    function spawnLyrics2() {
+        if (lyricsPool2.length === 0) return;
+
+        let lyricIndex;
+        do {
+            lyricIndex = random(0, lyricsPool2.length - 1);
+            if (displayedLyrics2.size == lyricsPool2.length) break;
+        } while (displayedLyrics2.has(lyricsPool2[lyricIndex]));
+
+        const lyric = lyricsPool2[lyricIndex];
+        displayedLyrics2.add(lyric);
+
+        const p = document.createElement('p');
+        p.textContent = lyric;
+
+        const x = random(0, window.innerWidth);
+        const y = random(0, window.innerHeight);
+        p.style.left = `${x}px`;
+        p.style.top = `${y}px`;
+        p.style.transform = 'rotate(-12deg)';
+        p.style.color = 'red';
+
+        if (Math.random() < 0.5) {
+            p.style.whiteSpace = 'normal';
+            p.style.width = '1px';
+            p.style.textAlign = 'center';
+            p.style.lineHeight = '1.5em';
+        } else {
+            p.style.whiteSpace = 'nowrap';
+            p.style.width = 'auto';
+        }
+
+        lyricsBackground.appendChild(p);
+
+        setTimeout(() => {
+            p.classList.add('fade-out');
+            setTimeout(() => {
+                p.remove();
+                displayedLyrics2.delete(lyric);
+            }, 500)
+        }, 5000);
+
+        setTimeout(spawnLyrics2, 1000);
+    }
+    spawnLyrics2();
 }
 
 function showLyricsBackground() {
@@ -298,10 +354,31 @@ function calculate() {
     msec -= mm2 * MS_PER_MINUTE;
     const ss2 = Math.floor(msec / MS_PER_SECOND);
     if (diff2 < 0) dd2 = -dd2;
-    result2Paragraph.innerHTML = '<span style="font-size:1.8em;">第</span><span style="font-size:2em;">' + dd2 + '</span><span style="font-size:1.8em;">日</span><br><span style="font-size:1.9em;">'
-        + hh2 + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mm2 + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
-        + ss2 + '</span><span style="font-size:1.5em;">秒</span>';
+    if (result2Paragraph) {
+        result2Paragraph.innerHTML = '<span style="font-size:1.8em;">第</span><span style="font-size:2em;">' + dd2 + '</span><span style="font-size:1.8em;">日</span><br><span style="font-size:1.9em;">'
+            + hh2 + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mm2 + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
+            + ss2 + '</span><span style="font-size:1.5em;">秒</span>';
+    }
     showFirework(dd);
+
+    const resultNanParagraph = document.getElementById('result-nan');
+    // 2026, 6 Apr, Month is zero-based (3 = April)
+    // 18:00, UTC+8 (HKT)
+    const dayNanDate = new Date(2026, 3, 6, 18, 0);
+    const diffNan = timestamp() + timzone_HKT_offset_ms - dayNanDate.getTime();
+    let msecNan = Math.abs(diffNan);
+    let ddNan = Math.floor(msecNan / (1000 * 60 * 60 * 24));
+    msecNan -= ddNan * 1000 * 60 * 60 * 24;
+    const hhNan = Math.floor(msecNan / (1000 * 60 * 60));
+    msecNan -= hhNan * 1000 * 60 * 60;
+    const mmNan = Math.floor(msecNan / (1000 * 60));
+    msecNan -= mmNan * 1000 * 60;
+    const ssNan = Math.floor(msecNan / 1000);
+    if (diffNan < 0) ddNan = -ddNan;
+    resultNanParagraph.innerHTML = '<span style="font-size:1.8em;">第</span><span style="font-size:2em;">' + ddNan + '</span><span style="font-size:1.8em;">日</span><br><span style="font-size:1.9em;">'
+        + hhNan + '</span><span style="font-size:1.5em;">小時</span><span style="font-size:1.9em;">' + mmNan + '</span><span style="font-size:1.5em;">分</span><span style="font-size:1.9em;">'
+        + ssNan + '</span><span style="font-size:1.5em;">秒</span>';
+
     setTimeout(calculate, 200);
 }
 
